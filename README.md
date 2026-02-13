@@ -14,3 +14,9 @@ Right-click a page or link, choose **Send to SwarmUI**, and it forwards the URL 
 * On first install, the settings page opens so you can enter your SwarmUI server URL. Requires full protocol, like `http://localhost:7801`
 * Keep popup mode on if you want SwarmUI in its own window
 * Right-click any page or model link and choose **Send to SwarmUI**
+
+![Right-click anywhere on a page to send the page URL to SwarmUI](Assets/screenshot-1.png)
+
+![Right-click on a link to send the link URL to SwarmUI](Assets/screenshot-2.png)
+
+![Amazing and modern settings page! Ooh! Ahh!](Assets/screenshot-3.png)
