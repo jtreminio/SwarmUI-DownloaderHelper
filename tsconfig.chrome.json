@@ -1,0 +1,22 @@
+{
+  "compilerOptions": {
+    "target": "ESNext",
+    "module": "None",
+    "lib": ["ESNext", "DOM"],
+    "types": ["chrome"],
+    "outFile": "./Assets/Chrome/chrome-extension.js",
+    "strict": true,
+    "strictNullChecks": false,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "sourceMap": false,
+    "removeComments": false,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true
+  },
+  "include": ["Chrome/ChromeExtension.ts"],
+  "exclude": ["node_modules", "Assets"]
+}

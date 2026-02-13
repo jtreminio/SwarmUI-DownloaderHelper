@@ -1,0 +1,18 @@
+# C# and related tools
+bin/
+obj/
+.vs/
+.vscode/
+.idea/
+*.user
+*.suo
+Properties/
+.dotnet/
+.aspnet/
+.local/
+**/Directory.Build.local.props
+
+# Node / TypeScript
+node_modules/
+*.js.map
+.build-tools/

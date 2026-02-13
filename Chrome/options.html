@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Send to SwarmUI Options</title>
+    <style>
+      :root {
+        color-scheme: light;
+        --bg: #f5f7fb;
+        --panel: #ffffff;
+        --panel-border: #dde3ec;
+        --text: #1f2933;
+        --muted: #526070;
+        --field-border: #c7d2e0;
+        --field-focus: #1f6feb;
+        --button: #1f6feb;
+        --button-text: #ffffff;
+        --success: #146c2e;
+        --error: #b00020;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        display: grid;
+        place-items: center;
+        padding: 24px;
+        background: linear-gradient(180deg, #f8faff 0%, var(--bg) 100%);
+        color: var(--text);
+        font-family: "Segoe UI", -apple-system, BlinkMacSystemFont, sans-serif;
+      }
+
+      .card {
+        width: 100%;
+        max-width: 660px;
+        background: var(--panel);
+        border: 1px solid var(--panel-border);
+        border-radius: 12px;
+        padding: 22px;
+        box-shadow: 0 8px 24px rgba(15, 23, 42, 0.07);
+      }
+
+      h1 {
+        margin: 0 0 6px;
+        font-size: 1.35rem;
+        letter-spacing: 0.01em;
+      }
+
+      .sub {
+        margin: 0 0 18px;
+        color: var(--muted);
+      }
+
+      button {
+        width: fit-content;
+        padding: 9px 16px;
+        border: 0;
+        border-radius: 8px;
+        cursor: pointer;
+        background: var(--button);
+        color: var(--button-text);
+        font-weight: 600;
+      }
+
+      button:hover {
+        filter: brightness(0.96);
+      }
+
+      form {
+        display: grid;
+        gap: 14px;
+      }
+
+      label {
+        font-weight: 600;
+      }
+
+      input[type="url"] {
+        width: 100%;
+        font: inherit;
+        padding: 10px 11px;
+        border: 1px solid var(--field-border);
+        border-radius: 8px;
+        outline: none;
+        transition: border-color 140ms ease, box-shadow 140ms ease;
+      }
+
+      input[type="url"]:focus {
+        border-color: var(--field-focus);
+        box-shadow: 0 0 0 3px rgba(31, 111, 235, 0.16);
+      }
+
+      .checkbox-row {
+        display: flex;
+        align-items: center;
+        gap: 9px;
+        font-weight: 500;
+      }
+
+      .checkbox-row input[type="checkbox"] {
+        margin: 0;
+        width: 16px;
+        height: 16px;
+      }
+
+      #status {
+        min-height: 1.2em;
+        margin: 2px 0 0;
+      }
+
+      .hint {
+        margin: 2px 0 0;
+        color: var(--muted);
+        line-height: 1.45;
+      }
+    </style>
+  </head>
+  <body>
+    <main class="card">
+      <h1>Send Link to SwarmUI</h1>
+      <p class="sub">Set your server once, then use right-click -> Send to SwarmUI.</p>
+      <form id="options-form">
+        <label for="target-url">SwarmUI Server URL</label>
+        <input
+          id="target-url"
+          name="targetUrl"
+          type="url"
+          placeholder="http://localhost:7801"
+          required
+          inputmode="url"
+        >
+        <label class="checkbox-row" for="use-popup-window">
+          <input id="use-popup-window" name="usePopupWindow" type="checkbox" checked>
+          Open SwarmUI in a popup window
+        </label>
+        <p class="hint">
+          Right-click anything on a web page and choose <strong>Send to SwarmUI</strong>. If clicked on a link, its href is sent; otherwise the current page URL is sent.
+        </p>
+        <button type="submit">Save</button>
+        <p id="status" aria-live="polite"></p>
+      </form>
+    </main>
+    <script src="chrome-extension.js"></script>
+  </body>
+</html>

@@ -1,0 +1,16 @@
+{
+  "manifest_version": 3,
+  "name": "Send Link to SwarmUI",
+  "description": "Adds a context-menu action that forwards a link href or current page URL to SwarmUI.",
+  "version": "1.0.0",
+  "permissions": [
+    "contextMenus",
+    "tabs",
+    "windows",
+    "storage"
+  ],
+  "background": {
+    "service_worker": "chrome-extension.js"
+  },
+  "options_page": "options.html"
+}
