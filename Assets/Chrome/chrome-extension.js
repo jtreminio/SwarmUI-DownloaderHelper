@@ -81,12 +81,13 @@ class ChromeUrlTools {
     }
 }
 class ChromeForwarderBackground {
+    contextMenuSyncPromise = null;
     constructor() {
         chrome.runtime.onInstalled.addListener((details) => {
             void this.onInstalled(details);
         });
         chrome.runtime.onStartup.addListener(() => {
-            void this.createContextMenu().catch((error) => {
+            void this.ensureContextMenu().catch((error) => {
                 console.error("Failed to recreate context menu on startup:", error);
             });
         });
@@ -139,11 +140,26 @@ class ChromeForwarderBackground {
     async initializeExtension() {
         try {
             await this.ensureDefaultSettings();
-            await this.createContextMenu();
+            await this.ensureContextMenu();
         }
         catch (error) {
             console.error("Failed to initialize extension:", error);
         }
+    }
+    ensureContextMenu() {
+        if (this.contextMenuSyncPromise) {
+            return this.contextMenuSyncPromise;
+        }
+        this.contextMenuSyncPromise = this.createContextMenu()
+            .catch((error) => {
+            if (!this.isDuplicateContextMenuError(error)) {
+                throw error;
+            }
+        })
+            .finally(() => {
+            this.contextMenuSyncPromise = null;
+        });
+        return this.contextMenuSyncPromise;
     }
     createContextMenu() {
         return new Promise((resolve, reject) => {
@@ -167,6 +183,13 @@ class ChromeForwarderBackground {
                 });
             });
         });
+    }
+    isDuplicateContextMenuError(error) {
+        if (!(error instanceof Error)) {
+            return false;
+        }
+        const normalized = error.message.toLowerCase();
+        return normalized.includes("duplicate id") && normalized.includes(ChromeExtensionConstants.menuId.toLowerCase());
     }
     getSourceUrl(info, tab) {
         if (info.linkUrl) {

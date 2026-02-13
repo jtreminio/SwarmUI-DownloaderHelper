@@ -129,13 +129,15 @@ class ChromeUrlTools
 
 class ChromeForwarderBackground
 {
+    private contextMenuSyncPromise: Promise<void> | null = null;
+
     public constructor()
     {
         chrome.runtime.onInstalled.addListener((details) => {
             void this.onInstalled(details);
         });
         chrome.runtime.onStartup.addListener(() => {
-            void this.createContextMenu().catch((error) => {
+            void this.ensureContextMenu().catch((error) => {
                 console.error("Failed to recreate context menu on startup:", error);
             });
         });
@@ -201,11 +203,30 @@ class ChromeForwarderBackground
     {
         try {
             await this.ensureDefaultSettings();
-            await this.createContextMenu();
+            await this.ensureContextMenu();
         }
         catch (error) {
             console.error("Failed to initialize extension:", error);
         }
+    }
+
+    private ensureContextMenu(): Promise<void>
+    {
+        if (this.contextMenuSyncPromise) {
+            return this.contextMenuSyncPromise;
+        }
+
+        this.contextMenuSyncPromise = this.createContextMenu()
+            .catch((error) => {
+                if (!this.isDuplicateContextMenuError(error)) {
+                    throw error;
+                }
+            })
+            .finally(() => {
+                this.contextMenuSyncPromise = null;
+            });
+
+        return this.contextMenuSyncPromise;
     }
 
     private createContextMenu(): Promise<void>
@@ -235,6 +256,16 @@ class ChromeForwarderBackground
                 );
             });
         });
+    }
+
+    private isDuplicateContextMenuError(error: unknown): boolean
+    {
+        if (!(error instanceof Error)) {
+            return false;
+        }
+
+        const normalized = error.message.toLowerCase();
+        return normalized.includes("duplicate id") && normalized.includes(ChromeExtensionConstants.menuId.toLowerCase());
     }
 
     private getSourceUrl(info: chrome.contextMenus.OnClickData, tab?: chrome.tabs.Tab): string | null
